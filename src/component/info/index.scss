@@ -1,0 +1,13 @@
+.info {
+  margin-left: 10px;
+  text-align: right;
+
+  &__title {
+    text-align: left;
+    font-size: 14px;
+  }
+
+  > p {
+    margin-bottom: 5px;
+  }
+}

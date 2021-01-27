@@ -1,0 +1,19 @@
+.game-area {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  &__wrap {
+    border: 5px solid;
+    border-color: #987f0f #fae36c #fae36c #987f0f;
+  }
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #9ead86;
+    padding: 4px;
+    border: 1px solid #000;
+  }
+}

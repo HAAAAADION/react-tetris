@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: calc(100vw / 3.75);
+}
+
+body{
+  touch-action: manipulation;
+}
+
+.index {
+  font-size: 12px;
+
+  &__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 10px;
+    max-width: 375px;
+    background: #efcc19;
+    border-radius: 20px;
+    box-shadow: inset 0 0 10px #fff;
+    overflow: hidden;
+  }
+}

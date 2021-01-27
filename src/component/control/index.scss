@@ -1,0 +1,101 @@
+.control {
+  display: flex;
+  margin-top: 20px;
+  padding: 0 20px;
+
+  &__core {
+    display: flex;
+    margin-bottom: 10px;
+
+    .c-btn + .c-btn {
+      margin-left: 10px;
+    }
+  }
+
+  &__direction {
+    flex: 1;
+    margin-left: 40px;
+    position: relative;
+  }
+
+  &__btn {
+    &--start,
+    &--reset {
+      .c-btn__icon {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    &--change .c-btn__icon {
+      width: 100px;
+      height: 100px;
+    }
+
+    &--left,
+    &--right,
+    &--down {
+      position: absolute;
+    }
+
+    &--left {
+      top: 50px;
+      left: 0;
+    }
+
+    &--right {
+      top: 50px;
+      right: 0;
+    }
+
+    &--down {
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.c-btn {
+  text-align: center;
+
+  &__icon {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    display: inline-block;
+    border-radius: 100%;
+    background: #5a65f1;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .2);
+    border: 1px solid #000;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 100%;
+    }
+
+    &::before {
+      box-shadow: inset 0 5px 10px 0 rgba(255, 255, 255, .8);
+    }
+
+    &::after {
+      box-shadow: inset 0 -5px 10px 0 rgba(0, 0, 0, .8);
+    }
+
+    &:active {
+      &::before {
+        box-shadow: inset 0 -3px 6px 0 rgba(255, 255, 255, .6);
+      }
+
+      &::after {
+        box-shadow: inset 0 5px 5px 0 rgba(0, 0, 0, .6);
+      }
+    }
+  }
+}
