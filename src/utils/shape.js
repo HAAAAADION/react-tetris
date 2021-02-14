@@ -1,6 +1,6 @@
 import { COL_SIZE, STATE } from 'config/constant';
 import shapeList from 'config/shape.json';
-import { getRandom, slice } from './utils';
+import { getRandom, slice, sleep } from './utils';
 import store from './store';
 
 /**
@@ -137,4 +137,45 @@ export const resetAnimation = (num, seed = -1) => {
     setTimeout(() => {
         resetAnimation(nextNum, cSeed);
     }, 50);
-  };
+};
+
+/**
+ * 闪动
+ * @param   {Array}     indexs  需要闪动的 y 下标集合   
+ * @param   {Number=}   count   剩余闪动次数, 2 次为一组
+ */
+export const flash = async (indexs, count = 9) => {
+    const { body } = store.state.home;
+
+    const cCount = count - 1;
+    if (cCount <= 1) return Promise.resolve();
+
+    const state = cCount % 2 === 0 ? STATE.COMPLETE : STATE.EMPTY;
+
+    indexs.forEach(e => {
+        body.splice(e * COL_SIZE, COL_SIZE, ...Array(COL_SIZE).fill(state));
+    });
+
+    store.updateState({ body: [...body] });
+
+    await sleep(200);
+    return flash(indexs, cCount);
+};
+
+/**
+ * 清除
+ * @param {Array} indexs    需要清除的 y 集合
+ */
+export const eliminate = async (indexs) => {
+    await flash(indexs);
+
+    const { body } = store.state.home;
+
+    indexs.forEach((e, i) => {
+        body.splice((e - i) * COL_SIZE, COL_SIZE);
+    });
+
+    body.unshift(...Array(COL_SIZE * indexs.length).fill(STATE.EMPTY));
+
+    store.updateState({ body: [...body] });
+};

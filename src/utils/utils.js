@@ -74,3 +74,16 @@ export const isEmpty = (v) => {
  * 是否手机
  */
 export const isMobile = () => /Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent);
+
+/**
+ * 延迟执行
+ * @param   {Number}  duration  延迟时间(毫秒)
+ * @return  {Promise}
+ */
+export const sleep = (duration) => {
+  return new Promise((resolev) => {
+    setTimeout(() => {
+      resolev();
+    }, duration);
+  });
+};

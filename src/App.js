@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { STATE, COL_SIZE, KEY_CODE_DIRECTION, EVENT_KEY } from 'config/constant';
-import { getShape, checkStop, getShapeSafeRange, resetAnimation } from 'utils/shape';
+import { getShape, checkStop, getShapeSafeRange, resetAnimation, eliminate } from 'utils/shape';
 import store from 'utils/store';
 import { slice, boundaryFix, getShapeSize, getShapeHalfSize, isEmpty } from 'utils/utils';
 import { bus } from 'utils/bus';
@@ -61,26 +61,6 @@ const App = (props) => {
   };
 
   /**
-   * 清除
-   * @param {Array} indexs    需要清除的下标
-   * @param {Array} newBody   当前画布
-   */
-  const eliminate = (indexs, newBody) => {
-    return new Promise((resolev) => {
-      // TODO 动画
-
-      setTimeout(() => {
-        indexs.forEach(e => {
-          newBody.splice(e * COL_SIZE, COL_SIZE);
-          newBody.unshift(...Array(COL_SIZE).fill('0'));
-        });
-
-        resolev();
-      }, 3000);
-    });
-  };
-
-  /**
    * 游戏结束
    */
   const handleEnd = () => {
@@ -94,17 +74,18 @@ const App = (props) => {
 
   /**
    * 结算
-   * @param {Array} newBody   当前画布
+   * @param {Boolean} isStop   是否停止
    */
-  const handleCount = async (newBody, isStop) => {
-    const newMatrix = slice(newBody, COL_SIZE);
+  const handleCount = async (isStop) => {
+    const { body } = store.state.home;
+    const newMatrix = slice(body, COL_SIZE);
 
     // 到底停止
     if (isStop) clearTimer();
 
     // 检测是否执行消除
     const indexs = newMatrix.reduce((result, item, index) => {
-      const isFull = item.every(e => e === '2');
+      const isFull = item.every(e => e === STATE.COMPLETE);
       if (isFull) result.push(index);
       return result;
     }, []);
@@ -119,16 +100,13 @@ const App = (props) => {
 
       console.log('正在执行消除, 下标集合: ', indexs);
 
-      await eliminate(indexs, newBody);
+      await eliminate(indexs);
       // 更新分数
       store.updateScore(indexs.length);
     }
 
-    // 更新画布
-    store.updateState({ body: [...newBody] });
-
     // 是否结束
-    const isEnd = newBody.slice(0, 10).some(e => e === STATE.COMPLETE);
+    const isEnd = body.slice(0, 10).some(e => e === STATE.COMPLETE);
 
     if (isEnd) handleEnd();         // 游戏结束
     else if (isEliminate) start();  // 消除
@@ -156,7 +134,7 @@ const App = (props) => {
     });
 
     store.updateState({ body: newBody });
-    handleCount(newBody, isStop);
+    handleCount(isStop);
   };
 
   useEffect(() => {
